@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+</head>
+<body>
+	<form action="{% url 'loginScore' %}" method="post">
+        {% csrf_token %}
+		学号：<input type="text" name="username"><br>
+		密码：<input type="text" name="password"><br>
+		验证码：<input type="text" name="verificationCode"><br>
+		<img src="{% url 'getVCP' %}">
+		<input type="submit" name="">
+	</form>
+</body>
+</html>
