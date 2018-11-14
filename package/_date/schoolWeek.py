@@ -2,9 +2,7 @@
 from package.db import db
 import datetime
 
-yearNow = datetime.datetime.now().year
-monthNow = datetime.datetime.now().month
-dayNow = datetime.datetime.now().day
+
 
 
 def getAppointDateInfo(year=yearNow, month=monthNow, day=dayNow, week=None):
@@ -16,6 +14,10 @@ def getAppointDateInfo(year=yearNow, month=monthNow, day=dayNow, week=None):
     :param week: 指定第几周，优先
     :return: 年月日[]， 周 {'s1':[], 's2':[]} '_id'字段表示当天在该学年第几天
     '''
+    yearNow = datetime.datetime.now().year
+    monthNow = datetime.datetime.now().month
+    dayNow = datetime.datetime.now().day
+
     year = yearNow if year == None else year
     month = monthNow if month == None else month
     day = dayNow if day == None else day
