@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import json
 from package.jiaowu.jiaowu import jiaowuSpider
+from package.imgRec.verificationCode import getVCode
 
 # Create your views here.
 '''
@@ -12,26 +13,39 @@ jiaowuSpider = jiaowuSpider()
 
 
 # 验证码图片
-def verificationCodePicture(req):
-    if req.method == 'GET':
-        vcp = jiaowuSpider.getVerificationCodePicture()
-        if not type(vcp) == dict:
-            return HttpResponse(vcp,content_type="image/jpg")
-        else:
-            return HttpResponse(vcp)
-    else:
-        r = {'status': 'error', 'code': 1502, 'body': '请求方法错误，应当是 GET。'}
-        return HttpResponse(json.dumps(r, ensure_ascii=False))
+def _VCodePicture():
+    '''
+    获取验证码图片，返回图片的二进制数据
+    :return:
+    '''
+    while True:
+        vcode = jiaowuSpider.getVerificationCodePicture()
+        if not type(vcode) == dict:
+            return vcode
+            break
 
 
 # 登录
 def login(req):
+    '''
+    获取用户输入的用户名密码，调用验证码识别获取验证码登录
+    :param req:
+    :return:
+    '''
     if req.method == 'POST':
         username = req.POST.get('username')
         password = req.POST.get('password')
-        verificationCode = req.POST.get('verificationCode')
-        loginResult = jiaowuSpider.login(username, password, verificationCode)
-        return HttpResponse(json.dumps(loginResult, ensure_ascii=False))
+        while True:
+            # 获取验证码图片
+            vcodedata = _VCodePicture()
+            # 识别验证码
+            vcode = getVCode(vcodedata)
+            if len(vcode) != 4:
+                continue
+            # 登录
+            loginResult = jiaowuSpider.login(username, password, vcode)
+            if not loginResult['code'] == 1301:
+                return HttpResponse(json.dumps(loginResult, ensure_ascii=False))
     else:
         r = {'status': 'error', 'code':1501, 'body': '请求方法错误，应当是 POST。'}
         return HttpResponse(json.dumps(r, ensure_ascii=False))

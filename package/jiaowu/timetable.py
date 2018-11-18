@@ -31,9 +31,23 @@ def getTimetable(clas, week=-1, weekday=-1, timeblock=-1):
     if not weekday == -1:
         todayTimetable = []
         for a in list_cls:
-            if week in a[weekday][0]['weeks']:
-                todayTimetable.append(a[weekday])
-
+            block = []
+            for b in a[weekday]:
+                if b['weeks'] == '' or week not in b['weeks']:
+                    pass
+                else:
+                    block.append(b)
+            if len(block) == 0:
+                todayTimetable.append([{
+                    "ca,pus": "",
+                    "floor": "",
+                    "name": "",
+                    "teacher": "",
+                    "weekInfo": "",
+                    "weeks": ""
+                }])
+            else:
+                todayTimetable.append(block)
         # 某时间块课表
         if not timeblock == -1:
             todayTimetable = list_cls[timeblock][weekday]

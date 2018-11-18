@@ -5,7 +5,7 @@ import datetime
 
 
 
-def getAppointDateInfo(year=yearNow, month=monthNow, day=dayNow, week=None):
+def getAppointDateInfo(year=None, month=None, day=None, week=None):
     '''
     TODO: 获取指定日期的日期信息，可指定年月日或周的其中之一，周优先。默认当天的信息。
     :param year: 指定年
