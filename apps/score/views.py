@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import json
+from urllib import parse
 from package.jiaowu.jiaowu import jiaowuSpider
 from package.imgRec.verificationCode import getVCode
 
@@ -19,9 +20,9 @@ def _VCodePicture():
     :return:
     '''
     while True:
-        vcode = jiaowuSpider.getVerificationCodePicture()
+        vcode, cookie = jiaowuSpider.getVerificationCodePicture()
         if not type(vcode) == dict:
-            return vcode
+            return vcode, cookie
             break
 
 
@@ -35,15 +36,20 @@ def login(req):
     if req.method == 'POST':
         username = req.POST.get('username')
         password = req.POST.get('password')
+        cookie = {}
         while True:
-            # 获取验证码图片
-            vcodedata = _VCodePicture()
+            # 获取验证码
+            vcodedata, tmpCK = _VCodePicture()
+            print('tmpCK  '+str(tmpCK))
+            print('cookie  '+str(cookie))
+            if not tmpCK == {}:
+                cookie = tmpCK
             # 识别验证码
             vcode = getVCode(vcodedata)
             if len(vcode) != 4:
                 continue
             # 登录
-            loginResult = jiaowuSpider.login(username, password, vcode)
+            loginResult = jiaowuSpider.login(username, password, vcode, cookie=cookie)
             if not loginResult['code'] == 1301:
                 return HttpResponse(json.dumps(loginResult, ensure_ascii=False))
     else:
@@ -54,7 +60,10 @@ def login(req):
 # 查询成绩
 def score(req):
     if req.method == 'GET':
-        sc = jiaowuSpider.getScore()
+        cookie = req.GET.get('cookie')
+        # url解码
+        cookie = json.loads(parse.unquote(cookie))
+        sc = jiaowuSpider.getScore(cookie)
         r = {'status':'success', 'code':1601, 'body':sc}
         return HttpResponse(json.dumps(r, ensure_ascii=False))
     else:
@@ -65,7 +74,10 @@ def score(req):
 # 查不及格成绩
 def failScore(req):
     if req.method == 'GET':
-        fsc = jiaowuSpider.getFailScore()
+        cookie = req.GET.get('cookie')
+        # url解码
+        cookie = json.loads(parse.unquote(cookie))
+        fsc = jiaowuSpider.getFailScore(cookie)
         r = {'status': 'success', 'code': 1601, 'body': fsc}
         return HttpResponse(json.dumps(r, ensure_ascii=False))
     else:

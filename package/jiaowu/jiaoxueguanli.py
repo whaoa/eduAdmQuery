@@ -1,6 +1,7 @@
 
 import requests
 import random
+from urllib import parse
 
 '''
     @TODO:查排名
@@ -9,27 +10,25 @@ import random
 
 
 class jiaowuSpider():
-    _rs = requests.Session()
 
     def login(self, u, p):
         '''
             TODO:登录
         '''
-        self.u = u
-        self.p = p
         logindata = {
             'u': u,
             'p': p,
             'r': 'on'
         }
-        loginResult = self._rs.post('http://202.207.247.60/Hander/LoginAjax.ashx', data=logindata)
+        loginResult = requests.post('http://202.207.247.60/Hander/LoginAjax.ashx', data=logindata)
         if loginResult.json()['Code'] == 1:
             # 登录成功
-            return 1
+            cookie = requests.utils.dict_from_cookiejar(loginResult.cookies)
+            return cookie
         else:
-            return 2
+            return 'error'
 
-    def getRanking(self):
+    def getRanking(self,username,  cookie):
         '''
             TODO:查排名
         '''
@@ -39,15 +38,16 @@ class jiaowuSpider():
             'order': 'asc',
             'sort': 'jqzypm,xh',
             'do': 'xsgrcj',
-            'xh': self.u
+            'xh': username
         }
-        rankResult = self._rs.post('http://202.207.247.60/Hander/Cj/CjAjax.ashx?rnd%20=%20' + str(random.random()), data=data)
+        ck_jar = requests.utils.cookiejar_from_dict(cookie)
+        rankResult = requests.post('http://202.207.247.60/Hander/Cj/CjAjax.ashx?rnd%20=%20' + str(random.random()), data=data, cookies=ck_jar)
         if rankResult.status_code == 200:
             return rankResult.json()[0]
         else:
             return {}
 
-    def getMakeupExam(self):
+    def getMakeupExam(self, username,  cookie):
         '''
             TODO:查补考
         '''
@@ -58,15 +58,17 @@ class jiaowuSpider():
             'sort': 'zc,xq,ksjc',
             'do': 'getbkkssjbyxh',
             'zxjxjhh': '2018-2019-1-1',
-            'xh' : self.u,
+            'xh' : username
         }
-        makeupExamResult = self._rs.post('http://202.207.247.60/Hander/Ks/Bkks/KsbkAjax.ashx?rnd=' + str(random.random()), data=data)
+        # 将cookie转为cookiejar对象
+        ck_jar = requests.utils.cookiejar_from_dict(cookie)
+        makeupExamResult = requests.post('http://202.207.247.60/Hander/Ks/Bkks/KsbkAjax.ashx?rnd=' + str(random.random()), data=data, cookies=ck_jar)
         if makeupExamResult.status_code == 200:
             return makeupExamResult.json()['rows']
         else:
             return []
 
-    def getStudentInfo(self):
+    def getStudentInfo(self,username,  cookie):
         '''
         TODO: 获取学生基本信息
         :return:
@@ -78,9 +80,10 @@ class jiaowuSpider():
             'order' : 'desc',
             'sort' : 'xh',
             'do' : 'getlist',
-            'xh' : self.u,
+            'xh' : username,
         }
-        studentInfo = self._rs.post('http://202.207.247.60/Hander/Students/StudentsAjax.ashx?rnd=' + str(random.random()), data=data)
+        ck_jar = requests.utils.cookiejar_from_dict(cookie)
+        studentInfo = requests.post('http://202.207.247.60/Hander/Students/StudentsAjax.ashx?rnd=' + str(random.random()), data=data, cookies=ck_jar)
         if studentInfo.status_code == 200:
             return studentInfo.json()['rows'][0]
         else:

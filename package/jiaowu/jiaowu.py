@@ -1,6 +1,7 @@
 
 import requests
 import random
+import json
 from bs4 import BeautifulSoup
 
 
@@ -11,19 +12,19 @@ from bs4 import BeautifulSoup
 
 
 class jiaowuSpider:
-    _rs = requests.Session()
     def getVerificationCodePicture(self):
         '''
          TODO:获取验证码图片
         '''
         try:
-            getYzmPicture = self._rs.get('http://202.207.247.44:8089/validateCodeAction.do?random=' + str(random.random()))
+            getYzmPicture = requests.get('http://202.207.247.44:8089/validateCodeAction.do?random=' + str(random.random()))
         except requests.exceptions:
             return {'status':'error', 'code':1201, 'body':'查成绩获取验证码请求失败'}
-        return getYzmPicture.content
+        cookie = requests.utils.dict_from_cookiejar(getYzmPicture.cookies)
+        return getYzmPicture.content, cookie
 
 
-    def login(self, username, password, yzm):
+    def login(self, username, password, yzm, cookie):
         '''
             TODO:登录
         '''
@@ -32,8 +33,9 @@ class jiaowuSpider:
             'mm': password,
             'v_yzm': yzm
         }
+        ck_jar = requests.utils.cookiejar_from_dict(cookie)
         try:
-            loginResult = self._rs.post('http://202.207.247.44:8089/loginAction.do', data=data)
+            loginResult = requests.post('http://202.207.247.44:8089/loginAction.do', data=data, cookies=ck_jar)
         except requests.exceptions:
             return {'status':'error', 'code':1202, 'body':'查成绩教务处登录请求失败'}
         if loginResult.status_code == 200:
@@ -44,20 +46,23 @@ class jiaowuSpider:
             elif '证件号不存在'in loginResult.text:
                 return {'status': 'fail', 'code': 1303, 'body': '证件号不存在'}
             else:
-                return {'status': 'success', 'code': 1401, 'body': '查成绩教务处登录成功'}
+                return {'status': 'success', 'code': 1401, 'body': cookie}
         else:
             return {'status':'error', 'code':1203, 'body':'查成绩教务处登录请求失败'}
 
-    def getScore(self):
+    def getScore(self, cookie):
         '''
             TODO:查成绩
             :return: semesters{[],[]}
         '''
+        ck_jar = requests.utils.cookiejar_from_dict(cookie)
         try:
-            scoreResult = self._rs.get('http://202.207.247.44:8089/gradeLnAllAction.do?type=ln&oper=qbinfo')
+            scoreResult = requests.get('http://202.207.247.44:8089/gradeLnAllAction.do?type=ln&oper=qbinfo', cookies=ck_jar)
         except requests.exceptions:
             print('ERROR：查成绩请求错误！')
             return
+
+
         soup = BeautifulSoup(scoreResult.text, 'lxml')
         lab_a = soup.find_all('a')
         semesters = {}
@@ -73,13 +78,14 @@ class jiaowuSpider:
                 semesters[semester].append(info)
         return semesters
 
-    def getFailScore(self):
+    def getFailScore(self, cookie):
         '''
             TODO:查不及格成绩
             :return: clss{[[]],[[]]}
         '''
+        ck_jar = requests.utils.cookiejar_from_dict(cookie)
         try:
-            scoreResult = self._rs.get('http://202.207.247.44:8089/gradeLnAllAction.do?type=ln&oper=bjg')
+            scoreResult = requests.get('http://202.207.247.44:8089/gradeLnAllAction.do?type=ln&oper=bjg', cookies=ck_jar)
         except requests.exceptions:
             return '错误'
         soup = BeautifulSoup(scoreResult.text, 'lxml')
