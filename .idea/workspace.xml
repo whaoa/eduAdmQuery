@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a3a9331d-21a2-4b1a-97a9-ace89322358f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/temp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/rank/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/rank/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/score/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/score/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package/jiaowu/jiaowu.py" beforeDir="false" afterPath="$PROJECT_DIR$/package/jiaowu/jiaowu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package/jiaowu/jiaoxueguanli.py" beforeDir="false" afterPath="$PROJECT_DIR$/package/jiaowu/jiaoxueguanli.py" afterDir="false" />
-    </list>
+    <list default="true" id="a3a9331d-21a2-4b1a-97a9-ace89322358f" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +24,7 @@
     <session id="-1131635614">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
+          <entry key="project.closed" value="15" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.121" value="1" />
@@ -519,7 +512,7 @@
       <window_info anchor="bottom" id="manage.py@eduAdmQuery" order="6" weight="0.25204584" />
       <window_info anchor="bottom" id="Message" order="7" />
       <window_info anchor="bottom" id="Find" order="8" weight="0.47207206" />
-      <window_info active="true" anchor="bottom" id="Run" order="9" visible="true" weight="0.30213463" />
+      <window_info anchor="bottom" id="Run" order="9" weight="0.30213463" />
       <window_info anchor="bottom" id="Debug" order="10" weight="0.39901477" />
       <window_info anchor="bottom" id="Cvs" order="11" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="12" weight="0.4" />
