@@ -104,3 +104,37 @@ class jiaowuSpider:
                 clss[cl].append(info)
         return clss
 
+    def evaluate(self, cookie):
+        ck_jar = requests.utils.cookiejar_from_dict(cookie)
+        try:
+            listpagehtml = requests.get(r'http://202.207.247.44:8089/jxpgXsAction.do?oper=listWj', cookies=ck_jar)
+        except requests.exceptions as e:
+            print(e)
+            return '错误'
+        soup = BeautifulSoup(listpagehtml.text, 'lxml')
+        imglist = soup.find_all('img', title='评估')
+        cklist = soup.find_all('img', title='查看')
+
+        if len(imglist) == 0 and len(cklist) == 0:
+            return '评教已结束'
+        elif  len(imglist) == 0 and len(cklist) != 0:
+            return '已评教'
+
+        result = True
+        for i in range(len(imglist)):
+            info = str(imglist[i]).split('" ')[2][6:].split('#@')
+            info = info[0:2] + info[-1:]
+            data = {
+                'wjbm': info[0],
+                'bpr': info[1],
+                'pgnr': info[2],
+                '0000000136': '25_0.95',
+                '0000000137': '25_0.95',
+                '0000000138': '30_0.95',
+                '0000000139': '20_0.95',
+                'zgpj': '很棒'
+            }
+            postResult = requests.post('http://202.207.247.44:8089/jxpgXsAction.do?oper=wjpg', data=data,cookies=ck_jar)
+            if '失败' in postResult:
+                result = False
+        return result

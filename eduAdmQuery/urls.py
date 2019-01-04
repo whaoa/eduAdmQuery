@@ -22,4 +22,5 @@ urlpatterns = [
     path(r'score/', include('score.urls')),
     path(r'timetable/', include('timetable.urls')),
     path(r'date/', include('date.urls')),
+    path(r'users/', include('users.urls')),
 ]

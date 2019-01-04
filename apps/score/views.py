@@ -83,3 +83,18 @@ def failScore(req):
     else:
         r = {'status': 'error', 'code':1502, 'body': '请求方法错误，应当是 GET。'}
         return HttpResponse(json.dumps(r, ensure_ascii=False))
+
+# 评教
+def evaluate(req):
+    if req.method == 'POST':
+        cookie = req.POST.get('cookie')
+        # url解码
+        cookie = json.loads(parse.unquote(cookie))
+        fsc = jiaowuSpider.evaluate(cookie)
+        while not fsc:
+            fsc = jiaowuSpider.evaluate(cookie)
+        r = {'status': 'success', 'code': 1601, 'body': fsc}
+        return HttpResponse(json.dumps(r, ensure_ascii=False))
+    else:
+        r = {'status': 'error', 'code':1501, 'body': '请求方法错误，应当是 POST。'}
+        return HttpResponse(json.dumps(r, ensure_ascii=False))

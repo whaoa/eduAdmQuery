@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'score',
     'rank',
     'timetable',
-    'date'
+    'date',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -134,5 +135,6 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATICFILE_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'media')
 ]

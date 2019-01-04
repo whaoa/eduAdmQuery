@@ -1,20 +1,3 @@
-import requests
-data = {
-    'u': 2017007700,
-    'p': 292530
-}
-res = requests.post('http://202.207.247.60/Hander/LoginAjax.ashx',data=data)
-cookie = res.cookies
-ck_dict = requests.utils.dict_from_cookiejar(cookie)
-print(ck_dict)
-ck_jar = requests.utils.cookiejar_from_dict(ck_dict)
-data = {
-    'limit':40,
-    'offset':0,
-    'order':'asc',
-    'sort':'jqzypm%2Cxh',
-    'do':'xsgrcj',
-    'xh':2017007700,
-}
-res2 = requests.post('http://202.207.247.60/Hander/Cj/CjAjax.ashx?rnd%20=%200.6621790734277038', data = data, cookies=ck_jar)
-print(res2.text)
+import json
+
+a = {"xh": "2017007700", "xm": "王浩", "xmpy": "wh", "ywxm": "WANG Hao", "cym": "", "sfzh": "140105199709292530", "xb": "男", "xslbdm": "", "sflbdm": "", "mzdm": "01", "xsxnb": "", "jg": "山西省太原市小店区", "csrq": "19970929", "zzmmdm": "03", "kqh": "14", "byzx": "金河中学", "gkzf": "470", "lqh": "201707683", "gkksh": "17140121151239", "rxksyz": "", "txdz": "", "yb": "", "jzxx": "", "rxrq": "20170901", "xsh": "29", "zyh": "290101", "zyfxh": "", "njdm": "2017", "bjh": "数据1702", "sfyxj": "是", "sfygjxj": "是", "xqh": "08", "ydf": "", "wyyz": "", "ssdz": "", "pyccdm": "", "pyccsm": "", "pyfsdm": "", "flfxdm": "", "sflx": "", "bz": "", "ycsjdm": "", "xjztdm": "", "xslbsm": "", "kqmc": "贵州", "bm": "数据1702", "pyfssm": "", "flfxsm": "", "mzmc": "汉族", "zzmmmc": "共青团员", "xsm": "大数据学院", "xsjc": "大数据学院", "njmc": "2017级", "ycsjsm": "", "sflbmc": "", "xqm": "明向校区", "zym": "软件工程（信息与大数据工程）", "zymc": "软件工程（信息与大数据工程）", "zyfxm": "", "zyfxmc": "", "yjbyrq": "", "zzmmjc": "共青团员", "byrq": "20210701", "skyzdm": "", "skyzmc": "", "xjztsm": "", "tsxslxdm": "", "tsxslxsm": "", "bz1": "", "bz2": "", "bz3": "", "xkmlm": "", "xwm": "工学学士", "bylxmc": "", "byzsbh": "", "sfyjbys": "", "xwzsbh": "", "xzlxdm": "01", "ccqj": "", "rowno": "1"}
